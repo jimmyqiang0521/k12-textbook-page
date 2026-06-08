@@ -556,7 +556,7 @@ function exportCSV(){
 // ── Init ─────────────────────────────────────────────────────────────
 
 // ── 加载数据 ─────────────────────────────────────────────────────────
-async function loadData(){
+async async function loadData(){
   const CHUNKS = 15;
   const bar = document.createElement('div');
   bar.id = 'loading-bar';
@@ -567,19 +567,19 @@ async function loadData(){
 
   for(let i=0;i<CHUNKS;i++){
     const idx=String(i).padStart(2,'0');
-    bar.textContent = ;
+    bar.textContent = `⏳ 正在加载教材数据 ${i+1}/${CHUNKS}...`;
     try{
       await new Promise((resolve,reject)=>{
         const s=document.createElement('script');
-        s.src=;
+        s.src=`data_chunks/data_${idx}.js`;
         s.onload=resolve; s.onerror=reject;
         document.head.appendChild(s);
       });
-      const key=;
+      const key=`__CHUNK_${idx}__`;
       if(window[key]){ DATA=DATA.concat(window[key]); delete window[key]; }
     }catch(e){
       bar.style.background='#c0392b';
-      bar.textContent=;
+      bar.textContent=`❌ 加载失败 data_chunks/data_${idx}.js: ${e}`;
       return;
     }
   }
